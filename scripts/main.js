@@ -148,7 +148,7 @@ const layerControl = L.control
 L.Control.Watermark = L.Control.extend({
   onAdd: function (map) {
     var img = L.DomUtil.create("img");
-    img.src = "../images/logo_harbor_institute.jpeg";
+    img.src = "images/logo_harbor_institute.jpeg";
     img.style.width = "300px";
     return img;
   },
