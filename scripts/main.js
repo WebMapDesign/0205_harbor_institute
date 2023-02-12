@@ -94,6 +94,7 @@ function onEachFeatureCity(feature, layer) {
 
 const layerCities = L.Proj.geoJson(test, {
   style: styleDefault,
+  onEachFeature: onEachFeatureCity,
 }).addTo(map);
 
 const layerCitiesPartner1 = L.Proj.geoJson(test, {
