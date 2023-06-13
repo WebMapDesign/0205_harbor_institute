@@ -88,54 +88,13 @@ const drawMap = () => {
     };
   }
 
-  function stylePartner1(feature) {
-    return {
-      fillColor: colorByCoverage(feature.properties.partner_1),
-      ...styleCommon,
-    };
-  }
+  const properties = orangeCountyCitiesUpdated?.features[0]?.properties;
 
-  function stylePartner2(feature) {
-    return {
-      fillColor: colorByCoverage(feature.properties.partner_2),
-      ...styleCommon,
-    };
-  }
+  const listPartners = Object.keys(properties).filter(
+    (item) => ["CITY", "OBJECTID", "city", "id_city"].includes(item) === false
+  );
 
-  function stylePartner3(feature) {
-    return {
-      fillColor: colorByCoverage(feature.properties.partner_3),
-      ...styleCommon,
-    };
-  }
-
-  function stylePartner4(feature) {
-    return {
-      fillColor: colorByCoverage(feature.properties.partner_4),
-      ...styleCommon,
-    };
-  }
-
-  function stylePartner5(feature) {
-    return {
-      fillColor: colorByCoverage(feature.properties.partner_5),
-      ...styleCommon,
-    };
-  }
-
-  function stylePartner6(feature) {
-    return {
-      fillColor: colorByCoverage(feature.properties.partner_6),
-      ...styleCommon,
-    };
-  }
-
-  function stylePartner7(feature) {
-    return {
-      fillColor: colorByCoverage(feature.properties.partner_7),
-      ...styleCommon,
-    };
-  }
+  const baseLayers = {};
 
   function onEachFeatureCity(feature, layer) {
     let popupContent =
@@ -148,49 +107,21 @@ const drawMap = () => {
     onEachFeature: onEachFeatureCity,
   }).addTo(map);
 
-  const layerCitiesPartner1 = L.Proj.geoJson(orangeCountyCitiesUpdated, {
-    style: stylePartner1,
-    onEachFeature: onEachFeatureCity,
-  });
+  listPartners.forEach((partner, index) => {
+    const styleFunction = function (feature) {
+      return {
+        fillColor: colorByCoverage(feature.properties[partner]),
+        ...styleCommon,
+      };
+    };
 
-  const layerCitiesPartner2 = L.Proj.geoJson(orangeCountyCitiesUpdated, {
-    style: stylePartner2,
-    onEachFeature: onEachFeatureCity,
-  });
+    const layerCitiesPartner = L.Proj.geoJson(orangeCountyCitiesUpdated, {
+      style: styleFunction,
+      onEachFeature: onEachFeatureCity,
+    });
 
-  const layerCitiesPartner3 = L.Proj.geoJson(orangeCountyCitiesUpdated, {
-    style: stylePartner3,
-    onEachFeature: onEachFeatureCity,
+    baseLayers[partner] = layerCitiesPartner;
   });
-
-  const layerCitiesPartner4 = L.Proj.geoJson(orangeCountyCitiesUpdated, {
-    style: stylePartner4,
-    onEachFeature: onEachFeatureCity,
-  });
-
-  const layerCitiesPartner5 = L.Proj.geoJson(orangeCountyCitiesUpdated, {
-    style: stylePartner5,
-    onEachFeature: onEachFeatureCity,
-  });
-  const layerCitiesPartner6 = L.Proj.geoJson(orangeCountyCitiesUpdated, {
-    style: stylePartner6,
-    onEachFeature: onEachFeatureCity,
-  });
-
-  const layerCitiesPartner7 = L.Proj.geoJson(orangeCountyCitiesUpdated, {
-    style: stylePartner7,
-    onEachFeature: onEachFeatureCity,
-  });
-
-  const baseLayers = {
-    VietRISE: layerCitiesPartner1,
-    "Orange County Justice Fund": layerCitiesPartner2,
-    "UCI Law Immigrant Rights Clinic": layerCitiesPartner3,
-    "UCI Law Workers, Law, and Organzing Clinic": layerCitiesPartner4,
-    "El Centro Cultural De Mexico": layerCitiesPartner5,
-    "National Day Laborer Organizing Network": layerCitiesPartner6,
-    "Tenayuca Labor Project": layerCitiesPartner7,
-  };
 
   const layerControl = L.control
     .layers(baseLayers, {}, { collapsed: false, position: "topright" })
